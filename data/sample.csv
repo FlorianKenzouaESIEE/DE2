@@ -1,0 +1,16 @@
+id,category,value,text
+1,tech,42.5,distributed systems handle large scale data processing
+2,science,88.3,machine learning models require feature engineering pipelines
+3,tech,15.7,spark shuffle operations move data across cluster nodes
+4,business,67.2,data warehouses store historical analytical information
+5,science,93.1,clustering algorithms group similar data points together
+6,tech,28.9,stream processing handles unbounded continuous data flows
+7,business,55.4,business intelligence dashboards visualize key metrics
+8,science,71.8,graph algorithms traverse connected node relationships
+9,tech,39.6,inverted indexes enable fast full text search retrieval
+10,business,82.0,data lakes store raw unprocessed information cheaply
+11,tech,46.3,partitioning distributes data across storage locations efficiently
+12,science,59.7,locality sensitive hashing finds approximate nearest neighbors
+13,business,34.1,operational databases handle transactional workloads
+14,tech,77.4,columnar storage formats reduce analytical query costs
+15,science,64.9,pagerank computes importance scores for graph vertices

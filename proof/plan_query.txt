@@ -1,0 +1,21 @@
+============================================================
+QUERY PLAN — Parquet index lookup (token == 'navi')
+============================================================
+== Parsed Logical Plan ==
+'Filter '`=`('token, navi)
++- Relation [token#774,doc_ids#775,freq#776L] parquet
+
+== Analyzed Logical Plan ==
+token: string, doc_ids: array<string>, freq: bigint
+Filter (token#774 = navi)
++- Relation [token#774,doc_ids#775,freq#776L] parquet
+
+== Optimized Logical Plan ==
+Filter (isnotnull(token#774) AND (token#774 = navi))
++- Relation [token#774,doc_ids#775,freq#776L] parquet
+
+== Physical Plan ==
+*(1) Filter (isnotnull(token#774) AND (token#774 = navi))
++- *(1) ColumnarToRow
+   +- FileScan parquet [token#774,doc_ids#775,freq#776L] Batched: true, DataFilters: [isnotnull(token#774), (token#774 = navi)], Format: Parquet, Location: InMemoryFileIndex(1 paths)[file:/mnt/c/Users/flori/OneDrive/Documents/Nouvelle_Sauvegarde/ESIEE/E..., PartitionFilters: [], PushedFilters: [IsNotNull(token), EqualTo(token,navi)], ReadSchema: struct<token:string,doc_ids:array<string>,freq:bigint>
+

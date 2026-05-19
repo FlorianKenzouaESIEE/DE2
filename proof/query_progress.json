@@ -1,0 +1,69 @@
+{
+  "id": "49baa6b2-b782-4605-a151-f8f06e4e3415",
+  "runId": "c97f79d2-9fc7-48ea-83e6-5d5b254e5d1c",
+  "name": null,
+  "timestamp": "2026-04-27T13:25:29.570Z",
+  "batchId": 4,
+  "batchDuration": 17708,
+  "durationMs": {
+    "addBatch": 15828,
+    "commitOffsets": 479,
+    "getBatch": 216,
+    "latestOffset": 528,
+    "queryPlanning": 47,
+    "triggerExecution": 17708,
+    "walCommit": 606
+  },
+  "eventTime": {
+    "avg": "2016-08-23T05:44:01.520Z",
+    "max": "2017-03-25T23:00:00.000Z",
+    "min": "2015-11-02T23:00:00.000Z",
+    "watermark": "2020-03-15T23:00:00.000Z"
+  },
+  "stateOperators": [
+    {
+      "operatorName": "stateStoreSave",
+      "numRowsTotal": 17,
+      "numRowsUpdated": 0,
+      "numRowsRemoved": 0,
+      "allUpdatesTimeMs": 378,
+      "allRemovalsTimeMs": 456,
+      "commitTimeMs": 168906,
+      "memoryUsedBytes": 94136,
+      "numRowsDroppedByWatermark": 2758,
+      "numShufflePartitions": 200,
+      "numStateStoreInstances": 200,
+      "customMetrics": {
+        "SnapshotLastUploaded.partition_139_default": -1,
+        "SnapshotLastUploaded.partition_157_default": -1,
+        "SnapshotLastUploaded.partition_172_default": -1,
+        "SnapshotLastUploaded.partition_178_default": -1,
+        "SnapshotLastUploaded.partition_33_default": -1,
+        "loadedMapCacheHitCount": 1000,
+        "loadedMapCacheMissCount": 200,
+        "stateOnCurrentVersionSizeBytes": 27968
+      }
+    }
+  ],
+  "sources": [
+    {
+      "description": "FileStreamSource[file:/mnt/c/Users/flori/OneDrive/Documents/Nouvelle_Sauvegarde/ESIEE/E4FD/Data_engineering_TAJINI/DE2/data/landing/csgo_matches]",
+      "startOffset": "{'logOffset': 3}",
+      "endOffset": "{'logOffset': 4}",
+      "latestOffset": "None",
+      "numInputRows": 9157,
+      "inputRowsPerSecond": 494.1,
+      "processedRowsPerSecond": 517.1,
+      "metrics": {}
+    }
+  ],
+  "sink": {
+    "description": "FileSink[file:/mnt/c/Users/flori/OneDrive/Documents/Nouvelle_Sauvegarde/ESIEE/E4FD/Data_engineering_TAJINI/DE2/outputs/lab1/stream_sink]",
+    "numOutputRows": -1,
+    "metrics": {}
+  },
+  "numInputRows": 9157,
+  "inputRowsPerSecond": 494.1,
+  "processedRowsPerSecond": 517.1,
+  "observedMetrics": {}
+}

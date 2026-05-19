@@ -1,0 +1,2 @@
+run_id,trigger_interval,watermark_duration,inputRowsPerSecond,processedRowsPerSecond,numInputRows,stateRows,durationMs,timestamp
+run_2_optimized,5 seconds,1 hour,0.0,354.7,9154,3,25805,Optimized run,2026-04-27 15:26:27

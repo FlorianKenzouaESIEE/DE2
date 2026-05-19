@@ -1,0 +1,303 @@
+============================================================
+INDEX BUILD PLAN
+============================================================
+
+== Parsed Logical Plan ==
+'Sort ['freq DESC NULLS LAST], true
++- Aggregate [token#150], [token#150, collect_list(doc_id#20, 0, 0) AS doc_ids#360, count(1) AS freq#361L]
+   +- Filter (length(token#150) > 1)
+      +- Filter NOT token#150 IN (that,on,is,at,le,was,it,if,de,not,and,vs,are,or,an,for,in,to,were,with,la,of,but,from,the,a,be,this,as,by,its)
+         +- Filter (length(token#150) > 0)
+            +- Project [doc_id#20, token#150]
+               +- Generate explode(split(lower(text#21), [\s\W]+, -1)), false, [token#150]
+                  +- Deduplicate [doc_id#20]
+                     +- Project [cast(match_id#13 as string) AS doc_id#20, concat_ws( , team_1#1, team_2#2, _map#3) AS text#21]
+                        +- Filter (((isnotnull(match_id#13) AND isnotnull(team_1#1)) AND isnotnull(team_2#2)) AND isnotnull(_map#3))
+                           +- Relation [date#0,team_1#1,team_2#2,_map#3,result_1#4,result_2#5,map_winner#6,starting_ct#7,ct_1#8,t_2#9,t_1#10,ct_2#11,event_id#12,match_id#13,rank_1#14,rank_2#15,map_wins_1#16,map_wins_2#17,match_winner#18] csv
+
+== Analyzed Logical Plan ==
+token: string, doc_ids: array<string>, freq: bigint
+Sort [freq#361L DESC NULLS LAST], true
++- Aggregate [token#150], [token#150, collect_list(doc_id#20, 0, 0) AS doc_ids#360, count(1) AS freq#361L]
+   +- Filter (length(token#150) > 1)
+      +- Filter NOT token#150 IN (that,on,is,at,le,was,it,if,de,not,and,vs,are,or,an,for,in,to,were,with,la,of,but,from,the,a,be,this,as,by,its)
+         +- Filter (length(token#150) > 0)
+            +- Project [doc_id#20, token#150]
+               +- Generate explode(split(lower(text#21), [\s\W]+, -1)), false, [token#150]
+                  +- Deduplicate [doc_id#20]
+                     +- Project [cast(match_id#13 as string) AS doc_id#20, concat_ws( , team_1#1, team_2#2, _map#3) AS text#21]
+                        +- Filter (((isnotnull(match_id#13) AND isnotnull(team_1#1)) AND isnotnull(team_2#2)) AND isnotnull(_map#3))
+                           +- Relation [date#0,team_1#1,team_2#2,_map#3,result_1#4,result_2#5,map_winner#6,starting_ct#7,ct_1#8,t_2#9,t_1#10,ct_2#11,event_id#12,match_id#13,rank_1#14,rank_2#15,map_wins_1#16,map_wins_2#17,match_winner#18] csv
+
+== Optimized Logical Plan ==
+InMemoryRelation [token#150, doc_ids#360, freq#361L], StorageLevel(disk, memory, deserialized, 1 replicas)
+   +- AdaptiveSparkPlan isFinalPlan=true
+      +- == Final Plan ==
+         ResultQueryStage 3
+         +- *(1) Sort [freq#361L DESC NULLS LAST], true, 0
+            +- ShuffleQueryStage 2
+               +- Exchange rangepartitioning(freq#361L DESC NULLS LAST, 4), ENSURE_REQUIREMENTS, [plan_id=404]
+                  +- ObjectHashAggregate(keys=[token#150], functions=[collect_list(doc_id#20, 0, 0), count(1)], output=[token#150, doc_ids#360, freq#361L])
+                     +- AQEShuffleRead coalesced
+                        +- ShuffleQueryStage 1
+                           +- Exchange hashpartitioning(token#150, 4), ENSURE_REQUIREMENTS, [plan_id=362]
+                              +- ObjectHashAggregate(keys=[token#150], functions=[partial_collect_list(doc_id#20, 0, 0), partial_count(1)], output=[token#150, buf#398, count#399L])
+                                 +- TableCacheQueryStage 0
+                                    +- InMemoryTableScan [doc_id#20, token#150]
+                                          +- InMemoryRelation [doc_id#20, token#150], StorageLevel(disk, memory, deserialized, 1 replicas)
+                                                +- AdaptiveSparkPlan isFinalPlan=true
+                                          +- == Final Plan ==
+                                             ResultQueryStage 1
+                                             +- *(1) Filter ((length(token#150) > 0) AND (NOT token#150 INSET a, an, and, are, as, at, be, but, by, de, for, from, if, in, is, it, its, la, le, not, of, on, or, that, the, this, to, vs, was, were, with AND (length(token#150) > 1)))
+                                                +- *(1) Generate explode(split(lower(text#21), [\s\W]+, -1)), [doc_id#20], false, [token#150]
+                                                   +- TableCacheQueryStage 0
+                                                      +- InMemoryTableScan [doc_id#20, text#21]
+                                                            +- InMemoryRelation [doc_id#20, text#21], StorageLevel(disk, memory, deserialized, 1 replicas)
+                                                                  +- AdaptiveSparkPlan isFinalPlan=true
+                        +- == Final Plan ==
+                           ResultQueryStage 1
+                           +- SortAggregate(key=[doc_id#20], functions=[first(text#21, false)], output=[doc_id#20, text#23])
+                              +- *(2) Sort [doc_id#20 ASC NULLS FIRST], false, 0
+                                 +- ShuffleQueryStage 0
+                                    +- Exchange hashpartitioning(doc_id#20, 4), ENSURE_REQUIREMENTS, [plan_id=59]
+                                       +- SortAggregate(key=[doc_id#20], functions=[partial_first(text#21, false)], output=[doc_id#20, first#26, valueSet#27])
+                                          +- *(1) Sort [doc_id#20 ASC NULLS FIRST], false, 0
+                                             +- *(1) Project [cast(match_id#13 as string) AS doc_id#20, concat_ws( , team_1#1, team_2#2, _map#3) AS text#21]
+                                                +- *(1) Filter (((isnotnull(match_id#13) AND isnotnull(team_1#1)) AND isnotnull(team_2#2)) AND isnotnull(_map#3))
+                                                   +- FileScan csv [team_1#1,team_2#2,_map#3,match_id#13] Batched: false, DataFilters: [isnotnull(match_id#13), isnotnull(team_1#1), isnotnull(team_2#2), isnotnull(_map#3)], Format: CSV, Location: InMemoryFileIndex(1 paths)[file:/mnt/c/Users/flori/OneDrive/Documents/Nouvelle_Sauvegarde/ESIEE/E..., PartitionFilters: [], PushedFilters: [IsNotNull(match_id), IsNotNull(team_1), IsNotNull(team_2), IsNotNull(_map)], ReadSchema: struct<team_1:string,team_2:string,_map:string,match_id:int>
+                        +- == Initial Plan ==
+                           SortAggregate(key=[doc_id#20], functions=[first(text#21, false)], output=[doc_id#20, text#23])
+                           +- Sort [doc_id#20 ASC NULLS FIRST], false, 0
+                              +- Exchange hashpartitioning(doc_id#20, 4), ENSURE_REQUIREMENTS, [plan_id=18]
+                                 +- SortAggregate(key=[doc_id#20], functions=[partial_first(text#21, false)], output=[doc_id#20, first#26, valueSet#27])
+                                    +- Sort [doc_id#20 ASC NULLS FIRST], false, 0
+                                       +- Project [cast(match_id#13 as string) AS doc_id#20, concat_ws( , team_1#1, team_2#2, _map#3) AS text#21]
+                                          +- Filter (((isnotnull(match_id#13) AND isnotnull(team_1#1)) AND isnotnull(team_2#2)) AND isnotnull(_map#3))
+                                             +- FileScan csv [team_1#1,team_2#2,_map#3,match_id#13] Batched: false, DataFilters: [isnotnull(match_id#13), isnotnull(team_1#1), isnotnull(team_2#2), isnotnull(_map#3)], Format: CSV, Location: InMemoryFileIndex(1 paths)[file:/mnt/c/Users/flori/OneDrive/Documents/Nouvelle_Sauvegarde/ESIEE/E..., PartitionFilters: [], PushedFilters: [IsNotNull(match_id), IsNotNull(team_1), IsNotNull(team_2), IsNotNull(_map)], ReadSchema: struct<team_1:string,team_2:string,_map:string,match_id:int>
+                                          +- == Initial Plan ==
+                                             Filter ((length(token#150) > 0) AND (NOT token#150 INSET a, an, and, are, as, at, be, but, by, de, for, from, if, in, is, it, its, la, le, not, of, on, or, that, the, this, to, vs, was, were, with AND (length(token#150) > 1)))
+                                             +- Generate explode(split(lower(text#21), [\s\W]+, -1)), [doc_id#20], false, [token#150]
+                                                +- InMemoryTableScan [doc_id#20, text#21]
+                                                      +- InMemoryRelation [doc_id#20, text#21], StorageLevel(disk, memory, deserialized, 1 replicas)
+                                                            +- AdaptiveSparkPlan isFinalPlan=true
+                  +- == Final Plan ==
+                     ResultQueryStage 1
+                     +- SortAggregate(key=[doc_id#20], functions=[first(text#21, false)], output=[doc_id#20, text#23])
+                        +- *(2) Sort [doc_id#20 ASC NULLS FIRST], false, 0
+                           +- ShuffleQueryStage 0
+                              +- Exchange hashpartitioning(doc_id#20, 4), ENSURE_REQUIREMENTS, [plan_id=59]
+                                 +- SortAggregate(key=[doc_id#20], functions=[partial_first(text#21, false)], output=[doc_id#20, first#26, valueSet#27])
+                                    +- *(1) Sort [doc_id#20 ASC NULLS FIRST], false, 0
+                                       +- *(1) Project [cast(match_id#13 as string) AS doc_id#20, concat_ws( , team_1#1, team_2#2, _map#3) AS text#21]
+                                          +- *(1) Filter (((isnotnull(match_id#13) AND isnotnull(team_1#1)) AND isnotnull(team_2#2)) AND isnotnull(_map#3))
+                                             +- FileScan csv [team_1#1,team_2#2,_map#3,match_id#13] Batched: false, DataFilters: [isnotnull(match_id#13), isnotnull(team_1#1), isnotnull(team_2#2), isnotnull(_map#3)], Format: CSV, Location: InMemoryFileIndex(1 paths)[file:/mnt/c/Users/flori/OneDrive/Documents/Nouvelle_Sauvegarde/ESIEE/E..., PartitionFilters: [], PushedFilters: [IsNotNull(match_id), IsNotNull(team_1), IsNotNull(team_2), IsNotNull(_map)], ReadSchema: struct<team_1:string,team_2:string,_map:string,match_id:int>
+                  +- == Initial Plan ==
+                     SortAggregate(key=[doc_id#20], functions=[first(text#21, false)], output=[doc_id#20, text#23])
+                     +- Sort [doc_id#20 ASC NULLS FIRST], false, 0
+                        +- Exchange hashpartitioning(doc_id#20, 4), ENSURE_REQUIREMENTS, [plan_id=18]
+                           +- SortAggregate(key=[doc_id#20], functions=[partial_first(text#21, false)], output=[doc_id#20, first#26, valueSet#27])
+                              +- Sort [doc_id#20 ASC NULLS FIRST], false, 0
+                                 +- Project [cast(match_id#13 as string) AS doc_id#20, concat_ws( , team_1#1, team_2#2, _map#3) AS text#21]
+                                    +- Filter (((isnotnull(match_id#13) AND isnotnull(team_1#1)) AND isnotnull(team_2#2)) AND isnotnull(_map#3))
+                                       +- FileScan csv [team_1#1,team_2#2,_map#3,match_id#13] Batched: false, DataFilters: [isnotnull(match_id#13), isnotnull(team_1#1), isnotnull(team_2#2), isnotnull(_map#3)], Format: CSV, Location: InMemoryFileIndex(1 paths)[file:/mnt/c/Users/flori/OneDrive/Documents/Nouvelle_Sauvegarde/ESIEE/E..., PartitionFilters: [], PushedFilters: [IsNotNull(match_id), IsNotNull(team_1), IsNotNull(team_2), IsNotNull(_map)], ReadSchema: struct<team_1:string,team_2:string,_map:string,match_id:int>
+      +- == Initial Plan ==
+         Sort [freq#361L DESC NULLS LAST], true, 0
+         +- Exchange rangepartitioning(freq#361L DESC NULLS LAST, 4), ENSURE_REQUIREMENTS, [plan_id=328]
+            +- ObjectHashAggregate(keys=[token#150], functions=[collect_list(doc_id#20, 0, 0), count(1)], output=[token#150, doc_ids#360, freq#361L])
+               +- Exchange hashpartitioning(token#150, 4), ENSURE_REQUIREMENTS, [plan_id=325]
+                  +- ObjectHashAggregate(keys=[token#150], functions=[partial_collect_list(doc_id#20, 0, 0), partial_count(1)], output=[token#150, buf#398, count#399L])
+                     +- InMemoryTableScan [doc_id#20, token#150]
+                           +- InMemoryRelation [doc_id#20, token#150], StorageLevel(disk, memory, deserialized, 1 replicas)
+                                 +- AdaptiveSparkPlan isFinalPlan=true
+                           +- == Final Plan ==
+                              ResultQueryStage 1
+                              +- *(1) Filter ((length(token#150) > 0) AND (NOT token#150 INSET a, an, and, are, as, at, be, but, by, de, for, from, if, in, is, it, its, la, le, not, of, on, or, that, the, this, to, vs, was, were, with AND (length(token#150) > 1)))
+                                 +- *(1) Generate explode(split(lower(text#21), [\s\W]+, -1)), [doc_id#20], false, [token#150]
+                                    +- TableCacheQueryStage 0
+                                       +- InMemoryTableScan [doc_id#20, text#21]
+                                             +- InMemoryRelation [doc_id#20, text#21], StorageLevel(disk, memory, deserialized, 1 replicas)
+                                                   +- AdaptiveSparkPlan isFinalPlan=true
+                        +- == Final Plan ==
+                           ResultQueryStage 1
+                           +- SortAggregate(key=[doc_id#20], functions=[first(text#21, false)], output=[doc_id#20, text#23])
+                              +- *(2) Sort [doc_id#20 ASC NULLS FIRST], false, 0
+                                 +- ShuffleQueryStage 0
+                                    +- Exchange hashpartitioning(doc_id#20, 4), ENSURE_REQUIREMENTS, [plan_id=59]
+                                       +- SortAggregate(key=[doc_id#20], functions=[partial_first(text#21, false)], output=[doc_id#20, first#26, valueSet#27])
+                                          +- *(1) Sort [doc_id#20 ASC NULLS FIRST], false, 0
+                                             +- *(1) Project [cast(match_id#13 as string) AS doc_id#20, concat_ws( , team_1#1, team_2#2, _map#3) AS text#21]
+                                                +- *(1) Filter (((isnotnull(match_id#13) AND isnotnull(team_1#1)) AND isnotnull(team_2#2)) AND isnotnull(_map#3))
+                                                   +- FileScan csv [team_1#1,team_2#2,_map#3,match_id#13] Batched: false, DataFilters: [isnotnull(match_id#13), isnotnull(team_1#1), isnotnull(team_2#2), isnotnull(_map#3)], Format: CSV, Location: InMemoryFileIndex(1 paths)[file:/mnt/c/Users/flori/OneDrive/Documents/Nouvelle_Sauvegarde/ESIEE/E..., PartitionFilters: [], PushedFilters: [IsNotNull(match_id), IsNotNull(team_1), IsNotNull(team_2), IsNotNull(_map)], ReadSchema: struct<team_1:string,team_2:string,_map:string,match_id:int>
+                        +- == Initial Plan ==
+                           SortAggregate(key=[doc_id#20], functions=[first(text#21, false)], output=[doc_id#20, text#23])
+                           +- Sort [doc_id#20 ASC NULLS FIRST], false, 0
+                              +- Exchange hashpartitioning(doc_id#20, 4), ENSURE_REQUIREMENTS, [plan_id=18]
+                                 +- SortAggregate(key=[doc_id#20], functions=[partial_first(text#21, false)], output=[doc_id#20, first#26, valueSet#27])
+                                    +- Sort [doc_id#20 ASC NULLS FIRST], false, 0
+                                       +- Project [cast(match_id#13 as string) AS doc_id#20, concat_ws( , team_1#1, team_2#2, _map#3) AS text#21]
+                                          +- Filter (((isnotnull(match_id#13) AND isnotnull(team_1#1)) AND isnotnull(team_2#2)) AND isnotnull(_map#3))
+                                             +- FileScan csv [team_1#1,team_2#2,_map#3,match_id#13] Batched: false, DataFilters: [isnotnull(match_id#13), isnotnull(team_1#1), isnotnull(team_2#2), isnotnull(_map#3)], Format: CSV, Location: InMemoryFileIndex(1 paths)[file:/mnt/c/Users/flori/OneDrive/Documents/Nouvelle_Sauvegarde/ESIEE/E..., PartitionFilters: [], PushedFilters: [IsNotNull(match_id), IsNotNull(team_1), IsNotNull(team_2), IsNotNull(_map)], ReadSchema: struct<team_1:string,team_2:string,_map:string,match_id:int>
+                           +- == Initial Plan ==
+                              Filter ((length(token#150) > 0) AND (NOT token#150 INSET a, an, and, are, as, at, be, but, by, de, for, from, if, in, is, it, its, la, le, not, of, on, or, that, the, this, to, vs, was, were, with AND (length(token#150) > 1)))
+                              +- Generate explode(split(lower(text#21), [\s\W]+, -1)), [doc_id#20], false, [token#150]
+                                 +- InMemoryTableScan [doc_id#20, text#21]
+                                       +- InMemoryRelation [doc_id#20, text#21], StorageLevel(disk, memory, deserialized, 1 replicas)
+                                             +- AdaptiveSparkPlan isFinalPlan=true
+                  +- == Final Plan ==
+                     ResultQueryStage 1
+                     +- SortAggregate(key=[doc_id#20], functions=[first(text#21, false)], output=[doc_id#20, text#23])
+                        +- *(2) Sort [doc_id#20 ASC NULLS FIRST], false, 0
+                           +- ShuffleQueryStage 0
+                              +- Exchange hashpartitioning(doc_id#20, 4), ENSURE_REQUIREMENTS, [plan_id=59]
+                                 +- SortAggregate(key=[doc_id#20], functions=[partial_first(text#21, false)], output=[doc_id#20, first#26, valueSet#27])
+                                    +- *(1) Sort [doc_id#20 ASC NULLS FIRST], false, 0
+                                       +- *(1) Project [cast(match_id#13 as string) AS doc_id#20, concat_ws( , team_1#1, team_2#2, _map#3) AS text#21]
+                                          +- *(1) Filter (((isnotnull(match_id#13) AND isnotnull(team_1#1)) AND isnotnull(team_2#2)) AND isnotnull(_map#3))
+                                             +- FileScan csv [team_1#1,team_2#2,_map#3,match_id#13] Batched: false, DataFilters: [isnotnull(match_id#13), isnotnull(team_1#1), isnotnull(team_2#2), isnotnull(_map#3)], Format: CSV, Location: InMemoryFileIndex(1 paths)[file:/mnt/c/Users/flori/OneDrive/Documents/Nouvelle_Sauvegarde/ESIEE/E..., PartitionFilters: [], PushedFilters: [IsNotNull(match_id), IsNotNull(team_1), IsNotNull(team_2), IsNotNull(_map)], ReadSchema: struct<team_1:string,team_2:string,_map:string,match_id:int>
+                  +- == Initial Plan ==
+                     SortAggregate(key=[doc_id#20], functions=[first(text#21, false)], output=[doc_id#20, text#23])
+                     +- Sort [doc_id#20 ASC NULLS FIRST], false, 0
+                        +- Exchange hashpartitioning(doc_id#20, 4), ENSURE_REQUIREMENTS, [plan_id=18]
+                           +- SortAggregate(key=[doc_id#20], functions=[partial_first(text#21, false)], output=[doc_id#20, first#26, valueSet#27])
+                              +- Sort [doc_id#20 ASC NULLS FIRST], false, 0
+                                 +- Project [cast(match_id#13 as string) AS doc_id#20, concat_ws( , team_1#1, team_2#2, _map#3) AS text#21]
+                                    +- Filter (((isnotnull(match_id#13) AND isnotnull(team_1#1)) AND isnotnull(team_2#2)) AND isnotnull(_map#3))
+                                       +- FileScan csv [team_1#1,team_2#2,_map#3,match_id#13] Batched: false, DataFilters: [isnotnull(match_id#13), isnotnull(team_1#1), isnotnull(team_2#2), isnotnull(_map#3)], Format: CSV, Location: InMemoryFileIndex(1 paths)[file:/mnt/c/Users/flori/OneDrive/Documents/Nouvelle_Sauvegarde/ESIEE/E..., PartitionFilters: [], PushedFilters: [IsNotNull(match_id), IsNotNull(team_1), IsNotNull(team_2), IsNotNull(_map)], ReadSchema: struct<team_1:string,team_2:string,_map:string,match_id:int>
+
+== Physical Plan ==
+AdaptiveSparkPlan isFinalPlan=false
++- InMemoryTableScan [token#150, doc_ids#360, freq#361L]
+      +- InMemoryRelation [token#150, doc_ids#360, freq#361L], StorageLevel(disk, memory, deserialized, 1 replicas)
+            +- AdaptiveSparkPlan isFinalPlan=true
+               +- == Final Plan ==
+                  ResultQueryStage 3
+                  +- *(1) Sort [freq#361L DESC NULLS LAST], true, 0
+                     +- ShuffleQueryStage 2
+                        +- Exchange rangepartitioning(freq#361L DESC NULLS LAST, 4), ENSURE_REQUIREMENTS, [plan_id=404]
+                           +- ObjectHashAggregate(keys=[token#150], functions=[collect_list(doc_id#20, 0, 0), count(1)], output=[token#150, doc_ids#360, freq#361L])
+                              +- AQEShuffleRead coalesced
+                                 +- ShuffleQueryStage 1
+                                    +- Exchange hashpartitioning(token#150, 4), ENSURE_REQUIREMENTS, [plan_id=362]
+                                       +- ObjectHashAggregate(keys=[token#150], functions=[partial_collect_list(doc_id#20, 0, 0), partial_count(1)], output=[token#150, buf#398, count#399L])
+                                          +- TableCacheQueryStage 0
+                                             +- InMemoryTableScan [doc_id#20, token#150]
+                                                   +- InMemoryRelation [doc_id#20, token#150], StorageLevel(disk, memory, deserialized, 1 replicas)
+                                                         +- AdaptiveSparkPlan isFinalPlan=true
+                                          +- == Final Plan ==
+                                             ResultQueryStage 1
+                                             +- *(1) Filter ((length(token#150) > 0) AND (NOT token#150 INSET a, an, and, are, as, at, be, but, by, de, for, from, if, in, is, it, its, la, le, not, of, on, or, that, the, this, to, vs, was, were, with AND (length(token#150) > 1)))
+                                                +- *(1) Generate explode(split(lower(text#21), [\s\W]+, -1)), [doc_id#20], false, [token#150]
+                                                   +- TableCacheQueryStage 0
+                                                      +- InMemoryTableScan [doc_id#20, text#21]
+                                                            +- InMemoryRelation [doc_id#20, text#21], StorageLevel(disk, memory, deserialized, 1 replicas)
+                                                                  +- AdaptiveSparkPlan isFinalPlan=true
+                        +- == Final Plan ==
+                           ResultQueryStage 1
+                           +- SortAggregate(key=[doc_id#20], functions=[first(text#21, false)], output=[doc_id#20, text#23])
+                              +- *(2) Sort [doc_id#20 ASC NULLS FIRST], false, 0
+                                 +- ShuffleQueryStage 0
+                                    +- Exchange hashpartitioning(doc_id#20, 4), ENSURE_REQUIREMENTS, [plan_id=59]
+                                       +- SortAggregate(key=[doc_id#20], functions=[partial_first(text#21, false)], output=[doc_id#20, first#26, valueSet#27])
+                                          +- *(1) Sort [doc_id#20 ASC NULLS FIRST], false, 0
+                                             +- *(1) Project [cast(match_id#13 as string) AS doc_id#20, concat_ws( , team_1#1, team_2#2, _map#3) AS text#21]
+                                                +- *(1) Filter (((isnotnull(match_id#13) AND isnotnull(team_1#1)) AND isnotnull(team_2#2)) AND isnotnull(_map#3))
+                                                   +- FileScan csv [team_1#1,team_2#2,_map#3,match_id#13] Batched: false, DataFilters: [isnotnull(match_id#13), isnotnull(team_1#1), isnotnull(team_2#2), isnotnull(_map#3)], Format: CSV, Location: InMemoryFileIndex(1 paths)[file:/mnt/c/Users/flori/OneDrive/Documents/Nouvelle_Sauvegarde/ESIEE/E..., PartitionFilters: [], PushedFilters: [IsNotNull(match_id), IsNotNull(team_1), IsNotNull(team_2), IsNotNull(_map)], ReadSchema: struct<team_1:string,team_2:string,_map:string,match_id:int>
+                        +- == Initial Plan ==
+                           SortAggregate(key=[doc_id#20], functions=[first(text#21, false)], output=[doc_id#20, text#23])
+                           +- Sort [doc_id#20 ASC NULLS FIRST], false, 0
+                              +- Exchange hashpartitioning(doc_id#20, 4), ENSURE_REQUIREMENTS, [plan_id=18]
+                                 +- SortAggregate(key=[doc_id#20], functions=[partial_first(text#21, false)], output=[doc_id#20, first#26, valueSet#27])
+                                    +- Sort [doc_id#20 ASC NULLS FIRST], false, 0
+                                       +- Project [cast(match_id#13 as string) AS doc_id#20, concat_ws( , team_1#1, team_2#2, _map#3) AS text#21]
+                                          +- Filter (((isnotnull(match_id#13) AND isnotnull(team_1#1)) AND isnotnull(team_2#2)) AND isnotnull(_map#3))
+                                             +- FileScan csv [team_1#1,team_2#2,_map#3,match_id#13] Batched: false, DataFilters: [isnotnull(match_id#13), isnotnull(team_1#1), isnotnull(team_2#2), isnotnull(_map#3)], Format: CSV, Location: InMemoryFileIndex(1 paths)[file:/mnt/c/Users/flori/OneDrive/Documents/Nouvelle_Sauvegarde/ESIEE/E..., PartitionFilters: [], PushedFilters: [IsNotNull(match_id), IsNotNull(team_1), IsNotNull(team_2), IsNotNull(_map)], ReadSchema: struct<team_1:string,team_2:string,_map:string,match_id:int>
+                                          +- == Initial Plan ==
+                                             Filter ((length(token#150) > 0) AND (NOT token#150 INSET a, an, and, are, as, at, be, but, by, de, for, from, if, in, is, it, its, la, le, not, of, on, or, that, the, this, to, vs, was, were, with AND (length(token#150) > 1)))
+                                             +- Generate explode(split(lower(text#21), [\s\W]+, -1)), [doc_id#20], false, [token#150]
+                                                +- InMemoryTableScan [doc_id#20, text#21]
+                                                      +- InMemoryRelation [doc_id#20, text#21], StorageLevel(disk, memory, deserialized, 1 replicas)
+                                                            +- AdaptiveSparkPlan isFinalPlan=true
+                  +- == Final Plan ==
+                     ResultQueryStage 1
+                     +- SortAggregate(key=[doc_id#20], functions=[first(text#21, false)], output=[doc_id#20, text#23])
+                        +- *(2) Sort [doc_id#20 ASC NULLS FIRST], false, 0
+                           +- ShuffleQueryStage 0
+                              +- Exchange hashpartitioning(doc_id#20, 4), ENSURE_REQUIREMENTS, [plan_id=59]
+                                 +- SortAggregate(key=[doc_id#20], functions=[partial_first(text#21, false)], output=[doc_id#20, first#26, valueSet#27])
+                                    +- *(1) Sort [doc_id#20 ASC NULLS FIRST], false, 0
+                                       +- *(1) Project [cast(match_id#13 as string) AS doc_id#20, concat_ws( , team_1#1, team_2#2, _map#3) AS text#21]
+                                          +- *(1) Filter (((isnotnull(match_id#13) AND isnotnull(team_1#1)) AND isnotnull(team_2#2)) AND isnotnull(_map#3))
+                                             +- FileScan csv [team_1#1,team_2#2,_map#3,match_id#13] Batched: false, DataFilters: [isnotnull(match_id#13), isnotnull(team_1#1), isnotnull(team_2#2), isnotnull(_map#3)], Format: CSV, Location: InMemoryFileIndex(1 paths)[file:/mnt/c/Users/flori/OneDrive/Documents/Nouvelle_Sauvegarde/ESIEE/E..., PartitionFilters: [], PushedFilters: [IsNotNull(match_id), IsNotNull(team_1), IsNotNull(team_2), IsNotNull(_map)], ReadSchema: struct<team_1:string,team_2:string,_map:string,match_id:int>
+                  +- == Initial Plan ==
+                     SortAggregate(key=[doc_id#20], functions=[first(text#21, false)], output=[doc_id#20, text#23])
+                     +- Sort [doc_id#20 ASC NULLS FIRST], false, 0
+                        +- Exchange hashpartitioning(doc_id#20, 4), ENSURE_REQUIREMENTS, [plan_id=18]
+                           +- SortAggregate(key=[doc_id#20], functions=[partial_first(text#21, false)], output=[doc_id#20, first#26, valueSet#27])
+                              +- Sort [doc_id#20 ASC NULLS FIRST], false, 0
+                                 +- Project [cast(match_id#13 as string) AS doc_id#20, concat_ws( , team_1#1, team_2#2, _map#3) AS text#21]
+                                    +- Filter (((isnotnull(match_id#13) AND isnotnull(team_1#1)) AND isnotnull(team_2#2)) AND isnotnull(_map#3))
+                                       +- FileScan csv [team_1#1,team_2#2,_map#3,match_id#13] Batched: false, DataFilters: [isnotnull(match_id#13), isnotnull(team_1#1), isnotnull(team_2#2), isnotnull(_map#3)], Format: CSV, Location: InMemoryFileIndex(1 paths)[file:/mnt/c/Users/flori/OneDrive/Documents/Nouvelle_Sauvegarde/ESIEE/E..., PartitionFilters: [], PushedFilters: [IsNotNull(match_id), IsNotNull(team_1), IsNotNull(team_2), IsNotNull(_map)], ReadSchema: struct<team_1:string,team_2:string,_map:string,match_id:int>
+               +- == Initial Plan ==
+                  Sort [freq#361L DESC NULLS LAST], true, 0
+                  +- Exchange rangepartitioning(freq#361L DESC NULLS LAST, 4), ENSURE_REQUIREMENTS, [plan_id=328]
+                     +- ObjectHashAggregate(keys=[token#150], functions=[collect_list(doc_id#20, 0, 0), count(1)], output=[token#150, doc_ids#360, freq#361L])
+                        +- Exchange hashpartitioning(token#150, 4), ENSURE_REQUIREMENTS, [plan_id=325]
+                           +- ObjectHashAggregate(keys=[token#150], functions=[partial_collect_list(doc_id#20, 0, 0), partial_count(1)], output=[token#150, buf#398, count#399L])
+                              +- InMemoryTableScan [doc_id#20, token#150]
+                                    +- InMemoryRelation [doc_id#20, token#150], StorageLevel(disk, memory, deserialized, 1 replicas)
+                                          +- AdaptiveSparkPlan isFinalPlan=true
+                           +- == Final Plan ==
+                              ResultQueryStage 1
+                              +- *(1) Filter ((length(token#150) > 0) AND (NOT token#150 INSET a, an, and, are, as, at, be, but, by, de, for, from, if, in, is, it, its, la, le, not, of, on, or, that, the, this, to, vs, was, were, with AND (length(token#150) > 1)))
+                                 +- *(1) Generate explode(split(lower(text#21), [\s\W]+, -1)), [doc_id#20], false, [token#150]
+                                    +- TableCacheQueryStage 0
+                                       +- InMemoryTableScan [doc_id#20, text#21]
+                                             +- InMemoryRelation [doc_id#20, text#21], StorageLevel(disk, memory, deserialized, 1 replicas)
+                                                   +- AdaptiveSparkPlan isFinalPlan=true
+                        +- == Final Plan ==
+                           ResultQueryStage 1
+                           +- SortAggregate(key=[doc_id#20], functions=[first(text#21, false)], output=[doc_id#20, text#23])
+                              +- *(2) Sort [doc_id#20 ASC NULLS FIRST], false, 0
+                                 +- ShuffleQueryStage 0
+                                    +- Exchange hashpartitioning(doc_id#20, 4), ENSURE_REQUIREMENTS, [plan_id=59]
+                                       +- SortAggregate(key=[doc_id#20], functions=[partial_first(text#21, false)], output=[doc_id#20, first#26, valueSet#27])
+                                          +- *(1) Sort [doc_id#20 ASC NULLS FIRST], false, 0
+                                             +- *(1) Project [cast(match_id#13 as string) AS doc_id#20, concat_ws( , team_1#1, team_2#2, _map#3) AS text#21]
+                                                +- *(1) Filter (((isnotnull(match_id#13) AND isnotnull(team_1#1)) AND isnotnull(team_2#2)) AND isnotnull(_map#3))
+                                                   +- FileScan csv [team_1#1,team_2#2,_map#3,match_id#13] Batched: false, DataFilters: [isnotnull(match_id#13), isnotnull(team_1#1), isnotnull(team_2#2), isnotnull(_map#3)], Format: CSV, Location: InMemoryFileIndex(1 paths)[file:/mnt/c/Users/flori/OneDrive/Documents/Nouvelle_Sauvegarde/ESIEE/E..., PartitionFilters: [], PushedFilters: [IsNotNull(match_id), IsNotNull(team_1), IsNotNull(team_2), IsNotNull(_map)], ReadSchema: struct<team_1:string,team_2:string,_map:string,match_id:int>
+                        +- == Initial Plan ==
+                           SortAggregate(key=[doc_id#20], functions=[first(text#21, false)], output=[doc_id#20, text#23])
+                           +- Sort [doc_id#20 ASC NULLS FIRST], false, 0
+                              +- Exchange hashpartitioning(doc_id#20, 4), ENSURE_REQUIREMENTS, [plan_id=18]
+                                 +- SortAggregate(key=[doc_id#20], functions=[partial_first(text#21, false)], output=[doc_id#20, first#26, valueSet#27])
+                                    +- Sort [doc_id#20 ASC NULLS FIRST], false, 0
+                                       +- Project [cast(match_id#13 as string) AS doc_id#20, concat_ws( , team_1#1, team_2#2, _map#3) AS text#21]
+                                          +- Filter (((isnotnull(match_id#13) AND isnotnull(team_1#1)) AND isnotnull(team_2#2)) AND isnotnull(_map#3))
+                                             +- FileScan csv [team_1#1,team_2#2,_map#3,match_id#13] Batched: false, DataFilters: [isnotnull(match_id#13), isnotnull(team_1#1), isnotnull(team_2#2), isnotnull(_map#3)], Format: CSV, Location: InMemoryFileIndex(1 paths)[file:/mnt/c/Users/flori/OneDrive/Documents/Nouvelle_Sauvegarde/ESIEE/E..., PartitionFilters: [], PushedFilters: [IsNotNull(match_id), IsNotNull(team_1), IsNotNull(team_2), IsNotNull(_map)], ReadSchema: struct<team_1:string,team_2:string,_map:string,match_id:int>
+                           +- == Initial Plan ==
+                              Filter ((length(token#150) > 0) AND (NOT token#150 INSET a, an, and, are, as, at, be, but, by, de, for, from, if, in, is, it, its, la, le, not, of, on, or, that, the, this, to, vs, was, were, with AND (length(token#150) > 1)))
+                              +- Generate explode(split(lower(text#21), [\s\W]+, -1)), [doc_id#20], false, [token#150]
+                                 +- InMemoryTableScan [doc_id#20, text#21]
+                                       +- InMemoryRelation [doc_id#20, text#21], StorageLevel(disk, memory, deserialized, 1 replicas)
+                                             +- AdaptiveSparkPlan isFinalPlan=true
+                  +- == Final Plan ==
+                     ResultQueryStage 1
+                     +- SortAggregate(key=[doc_id#20], functions=[first(text#21, false)], output=[doc_id#20, text#23])
+                        +- *(2) Sort [doc_id#20 ASC NULLS FIRST], false, 0
+                           +- ShuffleQueryStage 0
+                              +- Exchange hashpartitioning(doc_id#20, 4), ENSURE_REQUIREMENTS, [plan_id=59]
+                                 +- SortAggregate(key=[doc_id#20], functions=[partial_first(text#21, false)], output=[doc_id#20, first#26, valueSet#27])
+                                    +- *(1) Sort [doc_id#20 ASC NULLS FIRST], false, 0
+                                       +- *(1) Project [cast(match_id#13 as string) AS doc_id#20, concat_ws( , team_1#1, team_2#2, _map#3) AS text#21]
+                                          +- *(1) Filter (((isnotnull(match_id#13) AND isnotnull(team_1#1)) AND isnotnull(team_2#2)) AND isnotnull(_map#3))
+                                             +- FileScan csv [team_1#1,team_2#2,_map#3,match_id#13] Batched: false, DataFilters: [isnotnull(match_id#13), isnotnull(team_1#1), isnotnull(team_2#2), isnotnull(_map#3)], Format: CSV, Location: InMemoryFileIndex(1 paths)[file:/mnt/c/Users/flori/OneDrive/Documents/Nouvelle_Sauvegarde/ESIEE/E..., PartitionFilters: [], PushedFilters: [IsNotNull(match_id), IsNotNull(team_1), IsNotNull(team_2), IsNotNull(_map)], ReadSchema: struct<team_1:string,team_2:string,_map:string,match_id:int>
+                  +- == Initial Plan ==
+                     SortAggregate(key=[doc_id#20], functions=[first(text#21, false)], output=[doc_id#20, text#23])
+                     +- Sort [doc_id#20 ASC NULLS FIRST], false, 0
+                        +- Exchange hashpartitioning(doc_id#20, 4), ENSURE_REQUIREMENTS, [plan_id=18]
+                           +- SortAggregate(key=[doc_id#20], functions=[partial_first(text#21, false)], output=[doc_id#20, first#26, valueSet#27])
+                              +- Sort [doc_id#20 ASC NULLS FIRST], false, 0
+                                 +- Project [cast(match_id#13 as string) AS doc_id#20, concat_ws( , team_1#1, team_2#2, _map#3) AS text#21]
+                                    +- Filter (((isnotnull(match_id#13) AND isnotnull(team_1#1)) AND isnotnull(team_2#2)) AND isnotnull(_map#3))
+                                       +- FileScan csv [team_1#1,team_2#2,_map#3,match_id#13] Batched: false, DataFilters: [isnotnull(match_id#13), isnotnull(team_1#1), isnotnull(team_2#2), isnotnull(_map#3)], Format: CSV, Location: InMemoryFileIndex(1 paths)[file:/mnt/c/Users/flori/OneDrive/Documents/Nouvelle_Sauvegarde/ESIEE/E..., PartitionFilters: [], PushedFilters: [IsNotNull(match_id), IsNotNull(team_1), IsNotNull(team_2), IsNotNull(_map)], ReadSchema: struct<team_1:string,team_2:string,_map:string,match_id:int>
+
