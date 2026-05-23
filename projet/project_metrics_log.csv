@@ -1,36 +1,3 @@
-run_id,stage,task,phase,metric_name,metric_value,shuffle_read_bytes,shuffle_write_bytes,elapsed_ms,notes,timestamp
-r20260511_125651,Streaming,window_agg,baseline,processedRowsPerSecond,0.0,,,,,2026-05-11T12:56:51.517013
-r20260511_125651,Streaming,window_agg,baseline,numInputRows,0.0,,,,,2026-05-11T12:56:51.517021
-r20260511_125651,Streaming,window_agg,baseline,output_size_mb,0.1392,,,,,2026-05-11T12:56:51.517024
-r20260511_125651,ETL,bronze_landing,baseline,row_count,45773.0,,,,,2026-05-11T12:56:53.902928
-r20260511_125651,ETL,bronze_landing,baseline,size_mb,3.4789,,,,,2026-05-11T12:56:53.902937
-r20260511_125651,ETL,silver_cleaning,baseline,row_count,45773.0,,,,,2026-05-11T12:56:53.902939
-r20260511_125651,ETL,silver_cleaning,baseline,size_mb,1.0592,,,,,2026-05-11T12:56:53.902941
-r20260511_125651,ETL,silver_to_gold,baseline,size_mb,4.1921,,,,,2026-05-11T12:56:53.902946
-r20260511_125651,Text,build_index,baseline,unique_terms,1676.0,,,2801.1,,2026-05-11T12:56:59.355007
-r20260511_125651,Text,build_index,baseline,index_mb,0.8043,,,,,2026-05-11T12:56:59.355026
-r20260511_125651,Text,build_index,baseline,csv_mb,3.5147,,,,,2026-05-11T12:56:59.355029
-r20260511_125651,Text,build_index,baseline,parquet_mb,1.2005,,,,,2026-05-11T12:56:59.355030
-r20260511_125651,Text,build_index,baseline,compression_ratio,0.3416,,,,,2026-05-11T12:56:59.355032
-r20260511_125651,Text,query_latency,baseline,latency_ms_natus,127.305,,,,,2026-05-11T12:56:59.816681
-r20260511_125651,Text,query_latency,baseline,latency_ms_fnatic,40.2541,,,,,2026-05-11T12:56:59.856962
-r20260511_125651,Text,query_latency,baseline,latency_ms_mirage,43.0186,,,,,2026-05-11T12:56:59.900008
-r20260511_125651,Text,query_latency,baseline,latency_ms_dust2,43.6199,,,,,2026-05-11T12:56:59.943662
-r20260511_125651,Text,query_latency,baseline,latency_ms_inferno,37.1511,,,,,2026-05-11T12:56:59.980844
-r20260511_125651,Text,query_latency,baseline,max_latency_ms,127.305,,,,,2026-05-11T12:56:59.980853
-r20260511_125651,Iterative,kmeans_sweep,baseline,silhouette_k3,0.3725,,,,std=0.0016,2026-05-11T12:57:06.573227
-r20260511_125651,Iterative,kmeans_sweep,baseline,silhouette_k5,0.3616,,,,std=0.0122,2026-05-11T12:57:09.859337
-r20260511_125651,Iterative,kmeans_sweep,baseline,silhouette_k8,0.3356,,,,std=0.0126,2026-05-11T12:57:13.240403
-r20260511_125651,Iterative,kmeans_sweep,baseline,silhouette_k12,0.3062,,,,std=0.0144,2026-05-11T12:57:16.571770
-r20260511_125651,Iterative,kmeans_sweep,baseline,best_k,3.0,,,,,2026-05-11T12:57:16.571792
-r20260511_125651,Iterative,kmeans_sweep,baseline,best_silhouette,0.3725,,,14955.4,,2026-05-11T12:57:16.571795
-r20260511_125651,Iterative,partitioning,before,count_ms,40.4956,,,,,2026-05-11T12:57:18.799993
-r20260511_125651,Iterative,partitioning,after,count_ms,105.8607,,,,,2026-05-11T12:57:18.800002
-r20260511_125651,LLM_prep,curate,baseline,total_before,45773.0,,,,,2026-05-11T12:57:20.362084
-r20260511_125651,LLM_prep,curate,baseline,curated_rows,45771.0,,,,,2026-05-11T12:57:20.362094
-r20260511_125651,LLM_prep,curate,baseline,quality_ratio,1.0,,,,,2026-05-11T12:57:20.362097
-r20260511_125651,LLM_prep,curate,baseline,output_mb,2.8976,,,,,2026-05-11T12:57:20.362098
-r20260511_125651,ETL,compaction,before,scan_ms,375.5977,,,,,2026-05-11T12:57:22.214666
-r20260511_125651,ETL,compaction,before,file_count,424.0,,,,,2026-05-11T12:57:22.214676
-r20260511_125651,ETL,compaction,after,scan_ms,117.4519,,,,,2026-05-11T12:57:22.214679
-r20260511_125651,ETL,compaction,after,file_count,66.0,,,,,2026-05-11T12:57:22.214681
+version https://git-lfs.github.com/spec/v1
+oid sha256:f15af48848ddebbf5625607e0176db01f999c1780fc78c95ad79dd46adf82a20
+size 3505

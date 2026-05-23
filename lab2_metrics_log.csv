@@ -1,25 +1,3 @@
-section,metric,value,unit
-corpus,n_documents,27245,docs
-corpus,n_tokens_raw,94334,tokens
-corpus,n_tokens_clean,92519,tokens
-corpus,stop_word_reduction,1.9,%
-index,unique_terms,1645,terms
-footprint,parquet_size_kb,355.5,KB
-footprint,csv_size_kb,744.2,KB
-footprint,csv_parquet_ratio,2.09,×
-write_time,parquet_write_s,2.92,s
-write_time,csv_write_s,2.25,s
-
-term,format,n_docs_found,latency_ms
-navi,Parquet,0,292.2
-navi,CSV,0,142.9
-dust2,Parquet,2309,124.3
-dust2,CSV,2309,120.9
-inferno,Parquet,4561,120.8
-inferno,CSV,4561,114.1
-liquid,Parquet,637,127.8
-liquid,CSV,637,119.7
-astralis,Parquet,603,123.0
-astralis,CSV,603,88.8
-rugratz,Parquet,68,122.8
-rugratz,CSV,68,120.2
+version https://git-lfs.github.com/spec/v1
+oid sha256:d9a165f80be9ec9c041b13a2d0d3519f3ba1d27dd65030157b53d1defea6833e
+size 690

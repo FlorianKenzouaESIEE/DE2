@@ -1,0 +1,3 @@
+v1
+{"path":"file:///mnt/c/Users/flori/OneDrive/Documents/Nouvelle_Sauvegarde/ESIEE/E4FD/Data_engineering_TAJINI/DE2/streaming_lab/output_parquet_opt/part-00000-a02317f6-acb6-4ebf-92c4-655d6e6fd65e-c000.snappy.parquet","size":2960,"isDir":false,"modificationTime":1778528988182,"blockReplication":1,"blockSize":33554432,"action":"add"}
+{"path":"file:///mnt/c/Users/flori/OneDrive/Documents/Nouvelle_Sauvegarde/ESIEE/E4FD/Data_engineering_TAJINI/DE2/streaming_lab/output_parquet_opt/part-00001-b8c2cc94-a9c6-40af-9698-feadd742125e-c000.snappy.parquet","size":3044,"isDir":false,"modificationTime":1778528988183,"blockReplication":1,"blockSize":33554432,"action":"add"}
