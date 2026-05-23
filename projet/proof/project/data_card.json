@@ -1,0 +1,18 @@
+{
+  "name": "HLTV CS:GO Match Descriptions",
+  "source": "HLTV_CSGO",
+  "version": "v1.0",
+  "size_rows": 45771,
+  "size_mb": 2.898,
+  "schema": {
+    "doc_id": "string",
+    "text": ">= 100 chars",
+    "content_hash": "xxhash64"
+  },
+  "quality_filters": [
+    "min_text_length=100",
+    "xxhash64 dedup",
+    "null dropped"
+  ],
+  "intended_use": "LLM fine-tuning / RAG on CS:GO match history"
+}

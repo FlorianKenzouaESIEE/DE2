@@ -1,0 +1,14 @@
+== Parsed Logical Plan ==
+UnresolvedDataSource format: parquet, isStreaming: false, paths: 1 provided
+
+== Analyzed Logical Plan ==
+match_id: bigint, _map: string, date: date, team_1: string, team_2: string, result_1: int, result_2: int, winner_name: string, loser_name: string, winner_score: int, loser_score: int, rank_1: int, rank_2: int, score_diff: int, event_id: int, year: int, month: int
+Relation [match_id#20129L,_map#20130,date#20131,team_1#20132,team_2#20133,result_1#20134,result_2#20135,winner_name#20136,loser_name#20137,winner_score#20138,loser_score#20139,rank_1#20140,rank_2#20141,score_diff#20142,event_id#20143,year#20144,month#20145] parquet
+
+== Optimized Logical Plan ==
+Relation [match_id#20129L,_map#20130,date#20131,team_1#20132,team_2#20133,result_1#20134,result_2#20135,winner_name#20136,loser_name#20137,winner_score#20138,loser_score#20139,rank_1#20140,rank_2#20141,score_diff#20142,event_id#20143,year#20144,month#20145] parquet
+
+== Physical Plan ==
+*(1) ColumnarToRow
++- FileScan parquet [match_id#20129L,_map#20130,date#20131,team_1#20132,team_2#20133,result_1#20134,result_2#20135,winner_name#20136,loser_name#20137,winner_score#20138,loser_score#20139,rank_1#20140,rank_2#20141,score_diff#20142,event_id#20143,year#20144,month#20145] Batched: true, DataFilters: [], Format: Parquet, Location: InMemoryFileIndex(1 paths)[file:/home/daryl/Data_engineering/outputs/project/gold/match_results], PartitionFilters: [], PushedFilters: [], ReadSchema: struct<match_id:bigint,_map:string,date:date,team_1:string,team_2:string,result_1:int,result_2:in...
+

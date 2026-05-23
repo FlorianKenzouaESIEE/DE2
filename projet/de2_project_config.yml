@@ -1,0 +1,70 @@
+paths:
+  raw_csv: results.csv
+  bronze: outputs/project/bronze
+  silver: outputs/project/silver
+  gold: outputs/project/gold
+  streaming_landing: data/project/landing
+  streaming_sink: outputs/project/streaming
+  streaming_checkpoint: outputs/project/streaming_checkpoint
+  text_corpus: outputs/project/silver
+  inverted_index: outputs/project/text
+  models: outputs/project/models
+  llm_ready: outputs/project/llm_ready
+  proof: proof/project
+
+dataset:
+  track: A
+  source: HLTV_CSGO
+  description: CS:GO professional match results (HLTV), Track A Esports
+  natural_keys: [match_id, _map]
+
+slo:
+  streaming_processed_rows_per_sec_min: 100
+  text_query_latency_ms_max: 2000
+  iterative_quality_min: 0.25
+  pipeline_latency_minutes: 10
+  storage_reduction_ratio_target: 0.6
+  llm_min_text_length: 100
+  llm_quality_pass_ratio_min: 0.80
+
+keys:
+  natural_keys: [match_id, _map]
+  surrogate_key_method: xxhash64
+
+layout:
+  partition_by: [year, month]
+  sort_by: [date, match_id]
+
+streaming:
+  watermark: "10 minutes"
+  window_duration: "5 minutes"
+  trigger_interval: "10 seconds"
+  max_files_per_trigger: 1
+
+text:
+  stop_words: ["vs", "the", "and", "or", "of", "in", "on", "at", "to", "a", "an", "is", "it", "by", "for"]
+  min_token_length: 2
+  query_terms: [natus, fnatic, mirage, dust2, inferno]
+
+iterative:
+  path: clustering
+  clustering:
+    k_values: [3, 5, 8, 12]
+    seeds: [42, 123, 456]
+    features_col: scaled_features
+    feature_cols: [win_rate, avg_rank, avg_score_diff, avg_score, maps_variety]
+    min_maps_played: 5
+  graph:
+    num_iterations: 10
+    damping: 0.85
+
+llm:
+  min_text_length: 100
+  dedup_method: xxhash64
+  version: "v1.0"
+  source: HLTV_CSGO
+
+queries:
+  Q1: "groupBy(window, _map).agg(count, avg_score_diff)"
+  Q2: "inverted_index.filter(token == term)"
+  Q3: "team_clusters.groupBy(prediction).agg(count, avg_win_rate, avg_rank)"

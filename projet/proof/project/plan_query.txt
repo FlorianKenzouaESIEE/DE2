@@ -1,0 +1,22 @@
+== Parsed Logical Plan ==
+'Filter '`=`('token, natus)
++- Relation [token#216,doc_ids#217,freq#218L] parquet
+
+== Analyzed Logical Plan ==
+token: string, doc_ids: array<string>, freq: bigint
+Filter (token#216 = natus)
++- Relation [token#216,doc_ids#217,freq#218L] parquet
+
+== Optimized Logical Plan ==
+Filter (isnotnull(token#216) AND (token#216 = natus))
++- InMemoryRelation [token#216, doc_ids#217, freq#218L], StorageLevel(disk, memory, deserialized, 1 replicas)
+      +- *(1) ColumnarToRow
+         +- FileScan parquet [token#216,doc_ids#217,freq#218L] Batched: true, DataFilters: [], Format: Parquet, Location: InMemoryFileIndex(1 paths)[file:/home/daryl/Data_engineering/outputs/project/text], PartitionFilters: [], PushedFilters: [], ReadSchema: struct<token:string,doc_ids:array<string>,freq:bigint>
+
+== Physical Plan ==
+*(1) Filter (isnotnull(token#216) AND (token#216 = natus))
++- InMemoryTableScan [token#216, doc_ids#217, freq#218L], [isnotnull(token#216), (token#216 = natus)]
+      +- InMemoryRelation [token#216, doc_ids#217, freq#218L], StorageLevel(disk, memory, deserialized, 1 replicas)
+            +- *(1) ColumnarToRow
+               +- FileScan parquet [token#216,doc_ids#217,freq#218L] Batched: true, DataFilters: [], Format: Parquet, Location: InMemoryFileIndex(1 paths)[file:/home/daryl/Data_engineering/outputs/project/text], PartitionFilters: [], PushedFilters: [], ReadSchema: struct<token:string,doc_ids:array<string>,freq:bigint>
+

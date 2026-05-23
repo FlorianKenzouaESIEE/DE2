@@ -1,0 +1,47 @@
+== Parsed Logical Plan ==
+'Sort ['freq DESC NULLS LAST], true
++- Aggregate [token#85], [token#85, collect_set(doc_id#71, 0, 0) AS doc_ids#86, count(1) AS freq#87L]
+   +- Filter NOT token#85 IN (at,the,is,vs,to,on,an,it,for,of,and,by,a,in,or)
+      +- Filter (length(token#85) >= 2)
+         +- Project [doc_id#71, text#72, date#48, _map#51, team_1#49, team_2#50, text_clean#83, token#85]
+            +- Generate explode(split(text_clean#83, \s+, -1)), false, [token#85]
+               +- Project [doc_id#71, text#72, date#48, _map#51, team_1#49, team_2#50, regexp_replace(lower(text#72), [^a-z0-9\s],  , 1) AS text_clean#83]
+                  +- Project [doc_id#71, text#72, date#48, _map#51, team_1#49, team_2#50]
+                     +- Project [date#48, team_1#49, team_2#50, _map#51, result_1#52, result_2#53, map_winner#54, starting_ct#55, ct_1#56, t_2#57, t_1#58, ct_2#59, event_id#60, match_id#61L, rank_1#62, rank_2#63, map_wins_1#64, map_wins_2#65, match_winner#66, year#67, month#68, score_diff#69, doc_id#71, concat_ws( , team_1#49, team_2#50, _map#51, cast(result_1#52 as string), cast(result_2#53 as string)) AS text#72]
+                        +- Project [date#48, team_1#49, team_2#50, _map#51, result_1#52, result_2#53, map_winner#54, starting_ct#55, ct_1#56, t_2#57, t_1#58, ct_2#59, event_id#60, match_id#61L, rank_1#62, rank_2#63, map_wins_1#64, map_wins_2#65, match_winner#66, year#67, month#68, score_diff#69, concat(cast(match_id#61L as string), _, _map#51) AS doc_id#71]
+                           +- Relation [date#48,team_1#49,team_2#50,_map#51,result_1#52,result_2#53,map_winner#54,starting_ct#55,ct_1#56,t_2#57,t_1#58,ct_2#59,event_id#60,match_id#61L,rank_1#62,rank_2#63,map_wins_1#64,map_wins_2#65,match_winner#66,year#67,month#68,score_diff#69] parquet
+
+== Analyzed Logical Plan ==
+token: string, doc_ids: array<string>, freq: bigint
+Sort [freq#87L DESC NULLS LAST], true
++- Aggregate [token#85], [token#85, collect_set(doc_id#71, 0, 0) AS doc_ids#86, count(1) AS freq#87L]
+   +- Filter NOT token#85 IN (at,the,is,vs,to,on,an,it,for,of,and,by,a,in,or)
+      +- Filter (length(token#85) >= 2)
+         +- Project [doc_id#71, text#72, date#48, _map#51, team_1#49, team_2#50, text_clean#83, token#85]
+            +- Generate explode(split(text_clean#83, \s+, -1)), false, [token#85]
+               +- Project [doc_id#71, text#72, date#48, _map#51, team_1#49, team_2#50, regexp_replace(lower(text#72), [^a-z0-9\s],  , 1) AS text_clean#83]
+                  +- Project [doc_id#71, text#72, date#48, _map#51, team_1#49, team_2#50]
+                     +- Project [date#48, team_1#49, team_2#50, _map#51, result_1#52, result_2#53, map_winner#54, starting_ct#55, ct_1#56, t_2#57, t_1#58, ct_2#59, event_id#60, match_id#61L, rank_1#62, rank_2#63, map_wins_1#64, map_wins_2#65, match_winner#66, year#67, month#68, score_diff#69, doc_id#71, concat_ws( , team_1#49, team_2#50, _map#51, cast(result_1#52 as string), cast(result_2#53 as string)) AS text#72]
+                        +- Project [date#48, team_1#49, team_2#50, _map#51, result_1#52, result_2#53, map_winner#54, starting_ct#55, ct_1#56, t_2#57, t_1#58, ct_2#59, event_id#60, match_id#61L, rank_1#62, rank_2#63, map_wins_1#64, map_wins_2#65, match_winner#66, year#67, month#68, score_diff#69, concat(cast(match_id#61L as string), _, _map#51) AS doc_id#71]
+                           +- Relation [date#48,team_1#49,team_2#50,_map#51,result_1#52,result_2#53,map_winner#54,starting_ct#55,ct_1#56,t_2#57,t_1#58,ct_2#59,event_id#60,match_id#61L,rank_1#62,rank_2#63,map_wins_1#64,map_wins_2#65,match_winner#66,year#67,month#68,score_diff#69] parquet
+
+== Optimized Logical Plan ==
+Sort [freq#87L DESC NULLS LAST], true
++- Aggregate [token#85], [token#85, collect_set(doc_id#71, 0, 0) AS doc_ids#86, count(1) AS freq#87L]
+   +- Filter ((length(token#85) >= 2) AND NOT token#85 INSET a, an, and, at, by, for, in, is, it, of, on, or, the, to, vs)
+      +- Generate explode(split(text_clean#83, \s+, -1)), [1], false, [token#85]
+         +- Project [concat(cast(match_id#61L as string), _, _map#51) AS doc_id#71, regexp_replace(lower(concat_ws( , team_1#49, team_2#50, _map#51, cast(result_1#52 as string), cast(result_2#53 as string))), [^a-z0-9\s],  , 1) AS text_clean#83]
+            +- Relation [date#48,team_1#49,team_2#50,_map#51,result_1#52,result_2#53,map_winner#54,starting_ct#55,ct_1#56,t_2#57,t_1#58,ct_2#59,event_id#60,match_id#61L,rank_1#62,rank_2#63,map_wins_1#64,map_wins_2#65,match_winner#66,year#67,month#68,score_diff#69] parquet
+
+== Physical Plan ==
+AdaptiveSparkPlan isFinalPlan=false
++- Sort [freq#87L DESC NULLS LAST], true, 0
+   +- Exchange rangepartitioning(freq#87L DESC NULLS LAST, 8), ENSURE_REQUIREMENTS, [plan_id=398]
+      +- ObjectHashAggregate(keys=[token#85], functions=[collect_set(doc_id#71, 0, 0), count(1)], output=[token#85, doc_ids#86, freq#87L])
+         +- Exchange hashpartitioning(token#85, 8), ENSURE_REQUIREMENTS, [plan_id=395]
+            +- ObjectHashAggregate(keys=[token#85], functions=[partial_collect_set(doc_id#71, 0, 0), partial_count(1)], output=[token#85, buf#100, count#101L])
+               +- Filter ((length(token#85) >= 2) AND NOT token#85 INSET a, an, and, at, by, for, in, is, it, of, on, or, the, to, vs)
+                  +- Generate explode(split(text_clean#83, \s+, -1)), [doc_id#71], false, [token#85]
+                     +- Project [concat(cast(match_id#61L as string), _, _map#51) AS doc_id#71, regexp_replace(lower(concat_ws( , team_1#49, team_2#50, _map#51, cast(result_1#52 as string), cast(result_2#53 as string))), [^a-z0-9\s],  , 1) AS text_clean#83]
+                        +- FileScan parquet [team_1#49,team_2#50,_map#51,result_1#52,result_2#53,match_id#61L] Batched: true, DataFilters: [], Format: Parquet, Location: InMemoryFileIndex(1 paths)[file:/home/daryl/Data_engineering/outputs/project/silver], PartitionFilters: [], PushedFilters: [], ReadSchema: struct<team_1:string,team_2:string,_map:string,result_1:int,result_2:int,match_id:bigint>
+

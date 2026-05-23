@@ -1,0 +1,61 @@
+{
+  "id": "3b4c7990-006d-48df-bea6-7cfa8300aa18",
+  "runId": "6177d5b0-06df-4ee0-b24c-6e3faa05f06b",
+  "name": null,
+  "timestamp": "2026-05-11T10:51:00.001Z",
+  "batchId": 5,
+  "batchDuration": 4,
+  "durationMs": {
+    "latestOffset": 3,
+    "triggerExecution": 4
+  },
+  "eventTime": {
+    "watermark": "2020-03-17T22:50:00.000Z"
+  },
+  "stateOperators": [
+    {
+      "operatorName": "stateStoreSave",
+      "numRowsTotal": 3,
+      "numRowsUpdated": 0,
+      "numRowsRemoved": 0,
+      "allUpdatesTimeMs": 74,
+      "allRemovalsTimeMs": 22,
+      "commitTimeMs": 900,
+      "memoryUsedBytes": 4528,
+      "numRowsDroppedByWatermark": 0,
+      "numShufflePartitions": 8,
+      "numStateStoreInstances": 8,
+      "customMetrics": {
+        "SnapshotLastUploaded.partition_2_default": -1,
+        "SnapshotLastUploaded.partition_4_default": -1,
+        "SnapshotLastUploaded.partition_5_default": -1,
+        "SnapshotLastUploaded.partition_6_default": -1,
+        "SnapshotLastUploaded.partition_7_default": -1,
+        "loadedMapCacheHitCount": 64,
+        "loadedMapCacheMissCount": 0,
+        "stateOnCurrentVersionSizeBytes": 1704
+      }
+    }
+  ],
+  "sources": [
+    {
+      "description": "FileStreamSource[file:/home/daryl/Data_engineering/data/project/landing]",
+      "startOffset": "{'logOffset': 4}",
+      "endOffset": "{'logOffset': 4}",
+      "latestOffset": "None",
+      "numInputRows": 0,
+      "inputRowsPerSecond": 0.0,
+      "processedRowsPerSecond": 0.0,
+      "metrics": {}
+    }
+  ],
+  "sink": {
+    "description": "FileSink[file:/home/daryl/Data_engineering/outputs/project/streaming]",
+    "numOutputRows": -1,
+    "metrics": {}
+  },
+  "numInputRows": 0,
+  "inputRowsPerSecond": 0.0,
+  "processedRowsPerSecond": 0.0,
+  "observedMetrics": {}
+}
