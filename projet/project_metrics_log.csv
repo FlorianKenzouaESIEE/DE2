@@ -1,3 +1,40 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:f15af48848ddebbf5625607e0176db01f999c1780fc78c95ad79dd46adf82a20
-size 3505
+run_id,stage,task,phase,metric_name,metric_value,shuffle_read_bytes,shuffle_write_bytes,elapsed_ms,notes,timestamp
+r20260524_160722,ETL,bronze_landing,baseline,row_count,45773.0,,,4001.0,,2026-05-24T16:07:31.950813
+r20260524_160722,ETL,bronze_landing,baseline,size_mb,3.4789,,,,,2026-05-24T16:07:31.950876
+r20260524_160722,ETL,silver_cleaning,baseline,row_count,45773.0,,,5142.0,,2026-05-24T16:07:46.403018
+r20260524_160722,ETL,silver_cleaning,baseline,size_mb,1.0592,,,,,2026-05-24T16:07:46.403108
+r20260524_160722,ETL,silver_cleaning,baseline,null_violations,0.0,,,,,2026-05-24T16:07:46.403166
+r20260524_160722,ETL,silver_to_gold,baseline,size_mb,5.6724,,,163895.5,,2026-05-24T16:10:46.098274
+r20260524_160722,ETL,silver_to_gold,baseline,team_rows,2005.0,,,,,2026-05-24T16:10:46.098375
+r20260524_160722,ETL,silver_to_gold,baseline,map_rows,393.0,,,,,2026-05-24T16:10:46.098425
+r20260524_160722,ETL,silver_to_gold,baseline,match_rows,45773.0,,,,,2026-05-24T16:10:46.098474
+r20260524_160722,Streaming,window_agg,baseline,processedRowsPerSecond,0.0,,,,,2026-05-24T16:12:53.363023
+r20260524_160722,Streaming,window_agg,baseline,numInputRows,0.0,,,,,2026-05-24T16:12:53.363126
+r20260524_160722,Streaming,window_agg,baseline,output_size_mb,0.1392,,,,,2026-05-24T16:12:53.547787
+r20260524_160722,Text,build_index,baseline,unique_terms,1676.0,,,5313.1,,2026-05-24T16:13:40.797203
+r20260524_160722,Text,build_index,baseline,index_mb,0.8043,,,,,2026-05-24T16:13:40.797282
+r20260524_160722,Text,build_index,baseline,csv_mb,3.5147,,,,,2026-05-24T16:13:40.797379
+r20260524_160722,Text,build_index,baseline,parquet_mb,1.2005,,,,,2026-05-24T16:13:40.797447
+r20260524_160722,Text,build_index,baseline,compression_ratio,0.3416,,,,,2026-05-24T16:13:40.797588
+r20260524_160722,Text,query_latency,baseline,latency_ms_natus,192.4856,,,,,2026-05-24T16:13:42.080947
+r20260524_160722,Text,query_latency,baseline,latency_ms_fnatic,80.7083,,,,,2026-05-24T16:13:42.161897
+r20260524_160722,Text,query_latency,baseline,latency_ms_mirage,108.4588,,,,,2026-05-24T16:13:42.270500
+r20260524_160722,Text,query_latency,baseline,latency_ms_dust2,97.1992,,,,,2026-05-24T16:13:42.368054
+r20260524_160722,Text,query_latency,baseline,latency_ms_inferno,99.4589,,,,,2026-05-24T16:13:42.467644
+r20260524_160722,Text,query_latency,baseline,max_latency_ms,192.4856,,,,,2026-05-24T16:13:42.468008
+r20260524_160722,Iterative,kmeans_sweep,baseline,silhouette_k3,0.3725,,,,std=0.0016,2026-05-24T16:13:59.108933
+r20260524_160722,Iterative,kmeans_sweep,baseline,silhouette_k5,0.3616,,,,std=0.0122,2026-05-24T16:14:05.622113
+r20260524_160722,Iterative,kmeans_sweep,baseline,silhouette_k8,0.3356,,,,std=0.0126,2026-05-24T16:14:12.307698
+r20260524_160722,Iterative,kmeans_sweep,baseline,silhouette_k12,0.3062,,,,std=0.0144,2026-05-24T16:14:18.481212
+r20260524_160722,Iterative,kmeans_sweep,baseline,best_k,3.0,,,,,2026-05-24T16:14:18.481779
+r20260524_160722,Iterative,kmeans_sweep,baseline,best_silhouette,0.3725,,,27324.9,,2026-05-24T16:14:18.481824
+r20260524_160722,Iterative,partitioning,before,count_ms,69.5693,,,,,2026-05-24T16:14:27.805400
+r20260524_160722,Iterative,partitioning,after,count_ms,447.6309,,,,,2026-05-24T16:14:27.805466
+r20260524_160722,LLM_prep,curate,baseline,total_before,45773.0,,,,,2026-05-24T16:14:37.931044
+r20260524_160722,LLM_prep,curate,baseline,curated_rows,45771.0,,,,,2026-05-24T16:14:37.931108
+r20260524_160722,LLM_prep,curate,baseline,quality_ratio,1.0,,,,,2026-05-24T16:14:37.931138
+r20260524_160722,LLM_prep,curate,baseline,output_mb,2.8976,,,,,2026-05-24T16:14:37.931170
+r20260524_160722,ETL,compaction,before,scan_ms,26135.6082,,,,,2026-05-24T16:16:40.349981
+r20260524_160722,ETL,compaction,before,file_count,424.0,,,,,2026-05-24T16:16:40.350081
+r20260524_160722,ETL,compaction,after,scan_ms,6317.795,,,,,2026-05-24T16:16:40.350117
+r20260524_160722,ETL,compaction,after,file_count,66.0,,,,,2026-05-24T16:16:40.350155

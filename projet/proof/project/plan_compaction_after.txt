@@ -3,12 +3,12 @@ UnresolvedDataSource format: parquet, isStreaming: false, paths: 1 provided
 
 == Analyzed Logical Plan ==
 match_id: bigint, _map: string, date: date, team_1: string, team_2: string, result_1: int, result_2: int, winner_name: string, loser_name: string, winner_score: int, loser_score: int, rank_1: int, rank_2: int, score_diff: int, event_id: int, year: int, month: int
-Relation [match_id#20146L,_map#20147,date#20148,team_1#20149,team_2#20150,result_1#20151,result_2#20152,winner_name#20153,loser_name#20154,winner_score#20155,loser_score#20156,rank_1#20157,rank_2#20158,score_diff#20159,event_id#20160,year#20161,month#20162] parquet
+Relation [match_id#22946L,_map#22947,date#22948,team_1#22949,team_2#22950,result_1#22951,result_2#22952,winner_name#22953,loser_name#22954,winner_score#22955,loser_score#22956,rank_1#22957,rank_2#22958,score_diff#22959,event_id#22960,year#22961,month#22962] parquet
 
 == Optimized Logical Plan ==
-Relation [match_id#20146L,_map#20147,date#20148,team_1#20149,team_2#20150,result_1#20151,result_2#20152,winner_name#20153,loser_name#20154,winner_score#20155,loser_score#20156,rank_1#20157,rank_2#20158,score_diff#20159,event_id#20160,year#20161,month#20162] parquet
+Relation [match_id#22946L,_map#22947,date#22948,team_1#22949,team_2#22950,result_1#22951,result_2#22952,winner_name#22953,loser_name#22954,winner_score#22955,loser_score#22956,rank_1#22957,rank_2#22958,score_diff#22959,event_id#22960,year#22961,month#22962] parquet
 
 == Physical Plan ==
 *(1) ColumnarToRow
-+- FileScan parquet [match_id#20146L,_map#20147,date#20148,team_1#20149,team_2#20150,result_1#20151,result_2#20152,winner_name#20153,loser_name#20154,winner_score#20155,loser_score#20156,rank_1#20157,rank_2#20158,score_diff#20159,event_id#20160,year#20161,month#20162] Batched: true, DataFilters: [], Format: Parquet, Location: InMemoryFileIndex(1 paths)[file:/home/daryl/Data_engineering/outputs/project/gold/match_results_c..., PartitionFilters: [], PushedFilters: [], ReadSchema: struct<match_id:bigint,_map:string,date:date,team_1:string,team_2:string,result_1:int,result_2:in...
++- FileScan parquet [match_id#22946L,_map#22947,date#22948,team_1#22949,team_2#22950,result_1#22951,result_2#22952,winner_name#22953,loser_name#22954,winner_score#22955,loser_score#22956,rank_1#22957,rank_2#22958,score_diff#22959,event_id#22960,year#22961,month#22962] Batched: true, DataFilters: [], Format: Parquet, Location: InMemoryFileIndex(1 paths)[file:/mnt/c/Users/flori/OneDrive/Documents/Nouvelle_Sauvegarde/ESIEE/E..., PartitionFilters: [], PushedFilters: [], ReadSchema: struct<match_id:bigint,_map:string,date:date,team_1:string,team_2:string,result_1:int,result_2:in...
 

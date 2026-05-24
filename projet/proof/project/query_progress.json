@@ -1,45 +1,45 @@
 {
-  "id": "3b4c7990-006d-48df-bea6-7cfa8300aa18",
-  "runId": "6177d5b0-06df-4ee0-b24c-6e3faa05f06b",
+  "id": "49947f11-bc62-4444-83d3-5a14781e9668",
+  "runId": "5cc782df-86cf-4278-9329-35320849e09b",
   "name": null,
-  "timestamp": "2026-05-11T10:51:00.001Z",
+  "timestamp": "2026-05-24T14:12:40.000Z",
   "batchId": 5,
-  "batchDuration": 4,
+  "batchDuration": 112,
   "durationMs": {
-    "latestOffset": 3,
-    "triggerExecution": 4
+    "latestOffset": 111,
+    "triggerExecution": 112
   },
   "eventTime": {
-    "watermark": "2020-03-17T22:50:00.000Z"
+    "watermark": "1970-01-01T00:00:00.000Z"
   },
   "stateOperators": [
     {
       "operatorName": "stateStoreSave",
-      "numRowsTotal": 3,
+      "numRowsTotal": 0,
       "numRowsUpdated": 0,
       "numRowsRemoved": 0,
-      "allUpdatesTimeMs": 74,
-      "allRemovalsTimeMs": 22,
-      "commitTimeMs": 900,
-      "memoryUsedBytes": 4528,
+      "allUpdatesTimeMs": 0,
+      "allRemovalsTimeMs": 0,
+      "commitTimeMs": 0,
+      "memoryUsedBytes": 0,
       "numRowsDroppedByWatermark": 0,
       "numShufflePartitions": 8,
-      "numStateStoreInstances": 8,
+      "numStateStoreInstances": 0,
       "customMetrics": {
         "SnapshotLastUploaded.partition_2_default": -1,
         "SnapshotLastUploaded.partition_4_default": -1,
         "SnapshotLastUploaded.partition_5_default": -1,
         "SnapshotLastUploaded.partition_6_default": -1,
         "SnapshotLastUploaded.partition_7_default": -1,
-        "loadedMapCacheHitCount": 64,
+        "loadedMapCacheHitCount": 0,
         "loadedMapCacheMissCount": 0,
-        "stateOnCurrentVersionSizeBytes": 1704
+        "stateOnCurrentVersionSizeBytes": 0
       }
     }
   ],
   "sources": [
     {
-      "description": "FileStreamSource[file:/home/daryl/Data_engineering/data/project/landing]",
+      "description": "FileStreamSource[file:/mnt/c/Users/flori/OneDrive/Documents/Nouvelle_Sauvegarde/ESIEE/E4FD/Data_engineering_TAJINI/DE2/projet/data/project/landing]",
       "startOffset": "{'logOffset': 4}",
       "endOffset": "{'logOffset': 4}",
       "latestOffset": "None",
@@ -50,7 +50,7 @@
     }
   ],
   "sink": {
-    "description": "FileSink[file:/home/daryl/Data_engineering/outputs/project/streaming]",
+    "description": "FileSink[file:/mnt/c/Users/flori/OneDrive/Documents/Nouvelle_Sauvegarde/ESIEE/E4FD/Data_engineering_TAJINI/DE2/projet/outputs/project/streaming]",
     "numOutputRows": -1,
     "metrics": {}
   },

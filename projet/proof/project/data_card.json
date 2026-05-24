@@ -5,14 +5,19 @@
   "size_rows": 45771,
   "size_mb": 2.898,
   "schema": {
-    "doc_id": "string",
-    "text": ">= 100 chars",
-    "content_hash": "xxhash64"
+    "doc_id": "string (match_id + map)",
+    "text": "match description >= 100 chars",
+    "source": "HLTV_CSGO",
+    "content_hash": "xxhash64 for dedup",
+    "date": "match date",
+    "_map": "CS:GO map name",
+    "winner_team": "team that won the map",
+    "event_id": "tournament identifier"
   },
   "quality_filters": [
     "min_text_length=100",
-    "xxhash64 dedup",
-    "null dropped"
+    "content_hash dedup",
+    "null text dropped"
   ],
-  "intended_use": "LLM fine-tuning / RAG on CS:GO match history"
+  "intended_use": "LLM fine-tuning or RAG on CS:GO competitive match history"
 }
